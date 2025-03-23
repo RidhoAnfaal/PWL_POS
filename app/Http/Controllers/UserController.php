@@ -411,7 +411,6 @@ class UserController extends Controller
                 'nama' => 'required|max:100',
                 'password' => 'nullable|min:6|max:20'
             ];
-
             // Validate request data
             $validator = Validator::make($request->all(), $rules);
 
@@ -422,7 +421,6 @@ class UserController extends Controller
                     'msgField' => $validator->errors() // Fields with validation errors
                 ]);
             }
-
             // Find the user by ID
             $user = UserModel::find($id);
 
@@ -431,7 +429,6 @@ class UserController extends Controller
                 if (!$request->filled('password')) {
                     $request->request->remove('password');
                 }
-
                 // Update user data
                 $user->update($request->all());
 
@@ -446,8 +443,31 @@ class UserController extends Controller
                 ]);
             }
         }
-
         // Redirect if the request is not AJAX
+        return redirect('/');
+    }
+
+    public function confirm_ajax(string $id){
+        $user = UserModel::find($id);
+        return view('user.confirm_ajax', ['user' => $user]);
+    }
+
+    public function delete_ajax(Request $request){
+        if ($request->ajax() || $request->wantsJson()) {
+            $user = UserModel::find($request->id);
+            if ($user) {
+                $user->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }   
+        }
         return redirect('/');
     }
 
