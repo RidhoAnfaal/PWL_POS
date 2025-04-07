@@ -11,6 +11,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\StokController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +69,18 @@ use App\Http\Controllers\StokController;
 // // END OF JOB SHEET 4 /////////////////////////////////////////////////////////////////////
 
 // JOB SHEET 5 /////////////////////////////////////////////////////////////
-Route::get('/', [WelcomeController::class, 'index']);
+//Route::get('/', [WelcomeController::class, 'index']);
+
+// Protect home page with auth
+Route::get('/', [WelcomeController::class, 'index'])->middleware('auth');
+
+Route::pattern('id', '[0-9]+');
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('postlogin', [AuthController::class, 'postlogin']);
+//Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
 
 Route::group(['prefix' => 'user'], function() {
     Route::get('/', [UserController::class, 'index']);
@@ -171,4 +183,6 @@ Route::group(['prefix' => 'penjualan'], function () {
     Route::get('/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax']);
     Route::delete('/{id}', [PenjualanController::class, 'destroy']);
+});
+
 });

@@ -46,6 +46,25 @@
                 </form>
               </div>
             </li>
+            <!-- Add this to the right navbar links section -->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-toggle="dropdown" href="#">
+                  <i class="fas fa-user-circle"></i> {{ Auth::user()->nama }}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" class="dropdown-item">
+                      <i class="fas fa-user mr-2"></i> My Profile
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                      <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+                  </a>
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                  </form>
+              </div>
+            </li>
+            
       
             <!-- Messages Dropdown Menu -->
             <li class="nav-item dropdown">
