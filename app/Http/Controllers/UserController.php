@@ -471,6 +471,63 @@ class UserController extends Controller
         return redirect('/');
     }
 
+    public function register(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|string|min:3|unique:m_user,username',
+                'nama' => 'required|string|max:100',
+                'password' => 'required|min:6'
+            ];
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+    
+            UserModel::create([
+                'level_id' => $request->level_id,
+                'username' => $request->username,
+                'nama' => $request->nama,
+                'password' => bcrypt($request->password) // Jangan lupa hashing password
+            ]);
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'Data user berhasil disimpan',
+                'redirect' => url('/login')
+            ]);
+        }
+    
+        // Jika request bukan AJAX
+        return redirect('/login/');
+    }
+
+    public function showRegistrationForm()
+{
+    $breadcrumb = (object) [
+        'title' => 'User Registration',
+        'list' => ['Home', 'Register']
+    ];
+
+    $page = (object) [
+        'title' => 'Create new user account'
+    ];
+
+    $levels = LevelModel::all();
+    return view('auth.register', [
+        'breadcrumb' => $breadcrumb,
+        'page' => $page,
+        'levels' => $levels
+    ]);
+}
+
     // public function show($id, $name){
     //     // return view('user.profile', [
     //     //     'id' => $id,
