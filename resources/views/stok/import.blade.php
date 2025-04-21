@@ -1,26 +1,30 @@
-<form action="{{ url('/level/import_ajax') }}" method="POST" id="form-import-level" enctype="multipart/form-data">
+<form action="{{ url('/stok/import_ajax') }}" method="POST" id="form-import-stok" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Level Data</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title">Import Data Stok</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_level.xlsx') }}" class="btn btn-info btn-sm" download><i class="fa fa-file-excel"></i> Download</a>
-                    <small id="error-template" class="error-text form-text text-danger"></small>
+                    <a href="{{ asset('template_stok.xlsx') }}" class="btn btn-info btn-sm" download>
+                        <i class="fa fa-file-excel"></i> Download Template
+                    </a>
+                    <small id="error-file_stok" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Select File</label>
-                    <input type="file" name="file_level" id="file_level" class="form-control" 
+                    <label>Pilih File</label>
+                    <input type="file" name="file_stok" id="file_stok" class="form-control" 
                            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
-                    <small id="error-file_level" class="error-text form-text text-danger"></small>
+                    <small id="error-file_stok" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Upload</button>
             </div>
         </div>
@@ -29,21 +33,15 @@
 
 <script>
 $(document).ready(function() {
-    $("#form-import-level").validate({
+    $("#form-import-stok").validate({
         rules: {
-            file_level: {
+            file_stok: {
                 required: true,
                 extension: "xlsx"
             }
         },
-        messages: {
-            file_level: {
-                extension: "Please upload a valid Excel file (XLSX)"
-            }
-        },
         submitHandler: function(form) {
             var formData = new FormData(form);
-            
             $.ajax({
                 url: form.action,
                 type: form.method,
@@ -55,10 +53,10 @@ $(document).ready(function() {
                         $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
-                            title: 'Success',
+                            title: 'Berhasil',
                             text: response.message
                         });
-                        tableLevel.ajax.reload(); // Reload level datatable
+                        tableStok.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
@@ -66,17 +64,10 @@ $(document).ready(function() {
                         });
                         Swal.fire({
                             icon: 'error',
-                            title: 'Import Failed',
+                            title: 'Terjadi Kesalahan',
                             text: response.message
                         });
                     }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred during upload'
-                    });
                 }
             });
             return false;
@@ -86,10 +77,10 @@ $(document).ready(function() {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function(element) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function(element) {
             $(element).removeClass('is-invalid');
         }
     });

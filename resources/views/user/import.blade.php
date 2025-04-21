@@ -1,22 +1,26 @@
-<form action="{{ url('/level/import_ajax') }}" method="POST" id="form-import-level" enctype="multipart/form-data">
+<form action="{{ url('/user/import_ajax') }}" method="POST" id="form-import-user" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Level Data</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title">Import User Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_level.xlsx') }}" class="btn btn-info btn-sm" download><i class="fa fa-file-excel"></i> Download</a>
-                    <small id="error-template" class="error-text form-text text-danger"></small>
+                    <a href="{{ asset('template_user.xlsx') }}" class="btn btn-info btn-sm" download>
+                        <i class="fa fa-file-excel"></i> Download Template
+                    </a>
+                    <small id="error-file_user" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Select File</label>
-                    <input type="file" name="file_level" id="file_level" class="form-control" 
+                    <input type="file" name="file_user" id="file_user" class="form-control" 
                            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
-                    <small id="error-file_level" class="error-text form-text text-danger"></small>
+                    <small id="error-file_user" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -29,21 +33,15 @@
 
 <script>
 $(document).ready(function() {
-    $("#form-import-level").validate({
+    $("#form-import-user").validate({
         rules: {
-            file_level: {
+            file_user: {
                 required: true,
                 extension: "xlsx"
             }
         },
-        messages: {
-            file_level: {
-                extension: "Please upload a valid Excel file (XLSX)"
-            }
-        },
         submitHandler: function(form) {
             var formData = new FormData(form);
-            
             $.ajax({
                 url: form.action,
                 type: form.method,
@@ -55,10 +53,10 @@ $(document).ready(function() {
                         $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
-                            title: 'Success',
+                            title: 'Successful',
                             text: response.message
                         });
-                        tableLevel.ajax.reload(); // Reload level datatable
+                        tableUser.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
@@ -66,17 +64,10 @@ $(document).ready(function() {
                         });
                         Swal.fire({
                             icon: 'error',
-                            title: 'Import Failed',
+                            title: 'An Error Occurred',
                             text: response.message
                         });
                     }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred during upload'
-                    });
                 }
             });
             return false;
@@ -86,10 +77,10 @@ $(document).ready(function() {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function(element) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function(element) {
             $(element).removeClass('is-invalid');
         }
     });

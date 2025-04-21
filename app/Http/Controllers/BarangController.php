@@ -342,37 +342,6 @@ public function import_ajax(Request $request)
     }
 
     return redirect('/');
-    // if ($request->ajax() || $request->wantsJson()) {
-
-    //     // ✅ File validation: only xls or xlsx, max 1MB
-    //     $rules = [
-    //         'file_barang' => ['required', 'mimes:xls,xlsx', 'max:1024']
-    //     ];
-
-    //     $validator = Validator::make($request->all(), $rules);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'File validation failed!',
-    //             'msgField' => $validator->errors()
-    //         ]);
-    //     }
-
-    //     // ✅ Store file temporarily
-    //     $file = $request->file('file_barang');
-    //     $filePath = $file->store('temp'); // stored in storage/app/temp
-
-    //     // 🚨 Optional: process file with PhpSpreadsheet or Laravel Excel
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'File uploaded successfully',
-    //         'path' => $filePath
-    //     ]);
-    // }
-
-    // return redirect('/');
 }
 
 public function export_excel()
