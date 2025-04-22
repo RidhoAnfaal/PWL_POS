@@ -109,6 +109,8 @@ Route::middleware(['authorize:ADM'])->group(function () {
         Route::post('/import_ajax', [UserController::class, 'import_ajax']);
         Route::get('/export_excel', [UserController::class, 'export_excel']); 
         Route::get('/export_pdf', [UserController::class, 'export_pdf']); 
+        Route::post('/user/upload-photo', [UserController::class, 'uploadPhoto'])->name('user.uploadPhoto');
+
     });
 
     Route::group(['prefix' => 'level'], function() {
