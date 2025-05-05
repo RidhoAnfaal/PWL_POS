@@ -36,4 +36,14 @@ class UserModel extends Authenticatable
     public function getRole(){
         return $this->level->level_kode;
     }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    
+    public function getJWTCustomClaims()
+    {
+        return[];
+    }
 }
